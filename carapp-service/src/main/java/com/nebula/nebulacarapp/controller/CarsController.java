@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/cars")
@@ -36,8 +37,9 @@ public class CarsController {
         return carRepository.findAll();
     }
 
-    @GetMapping("/admin/{carId}")
-    public Car getCarById(@PathVariable String carId) {
-        return carRepository.findById(Integer.valueOf(carId)).orElse(null);
+    @DeleteMapping("/admin/{carId}")
+    public ResponseEntity<String> deleteCarById(@PathVariable int carId) {
+        carRepository.deleteById(carId);
+        return new ResponseEntity<String>("Deleted", HttpStatus.valueOf(204));
     }
 }
