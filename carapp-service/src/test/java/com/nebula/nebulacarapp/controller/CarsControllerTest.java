@@ -42,4 +42,5 @@ public class CarsControllerTest {
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         verify(carSevice, times(1)).getAllCars();
     }
+
 }

@@ -37,10 +37,10 @@ public class CarsController {
       public ResponseEntity<Object> getCars() {
           return new ResponseEntity<>(carSevice.getAllCars(), HttpStatus.OK) ;
       }
-//
-//    @DeleteMapping("/admin/{carId}")
-//    public ResponseEntity<String> deleteCarById(@PathVariable int carId) {
-//        carRepository.deleteById(carId);
-//        return new ResponseEntity<String>("Deleted", HttpStatus.valueOf(204));
-//    }
+
+      @DeleteMapping("/admin/{carId}")
+      public ResponseEntity<Object> deleteCarById(@PathVariable int carId) {
+        carSevice.deleteById(carId);
+        return new ResponseEntity<>( HttpStatus.valueOf(204));
+      }
 }

@@ -25,5 +25,9 @@ public class CarSevice {
         return carRepository.findAll();
     }
 
+    public void deleteById(int id){
+        carRepository.deleteById(id);
+    }
+
 
 }
