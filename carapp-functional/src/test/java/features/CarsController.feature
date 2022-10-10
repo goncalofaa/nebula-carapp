@@ -5,5 +5,5 @@ Feature: Functional Tests for cars endpoint
     And A status code of 201 is received
 
   Scenario: http get request to cars/admin endpoint
-    When A get request is made to "cars/admin"
+    When A get request is made to "cars/admin" endpoint
     And A status code of 200 is received
