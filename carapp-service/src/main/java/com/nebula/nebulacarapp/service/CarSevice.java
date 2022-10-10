@@ -21,5 +21,9 @@ public class CarSevice {
         carRepository.saveAll(carsList);
     }
 
+    public List<Car> getAllCars(){
+        return carRepository.findAll();
+    }
+
 
 }

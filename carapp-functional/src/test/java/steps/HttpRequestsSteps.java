@@ -22,14 +22,14 @@ public class HttpRequestsSteps {
     private static String jsonString;
 
 
-    @When("A request is made to {string} endpoint")
+    @When("A get request is made to {string} endpoint")
     public void requestTo(String endpoint){
         RequestSpecification request = RestAssured.given();
         request.header("Content-Type", "application/json");
         response = request.get(endpoint);
     }
 
-    @When("A request is made to {string} endpoint with a car being {string}")
+    @When("A post request is made to {string} endpoint with a car being {string}")
     public void requestToWithBody(String endpoint, String body){
         List<Object> bodyList = new ArrayList<>();
         Map<String, Object> bodyMap = new HashMap<>();
@@ -57,4 +57,5 @@ public class HttpRequestsSteps {
     public void statusCodeReceived(int code){
         Assert.assertEquals(code, response.getStatusCode());
     }
+
 }

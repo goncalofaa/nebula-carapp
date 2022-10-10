@@ -35,4 +35,11 @@ public class CarsControllerTest {
         Assertions.assertEquals(HttpStatus.CREATED, response.getStatusCode());
         verify(carSevice, times(1)).saveCars(carsList);
     }
+
+    @Test
+    void whenGetCarsCalled_return200_getAllCarsCalled(){
+        response = carsController.getCars();
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        verify(carSevice, times(1)).getAllCars();
+    }
 }

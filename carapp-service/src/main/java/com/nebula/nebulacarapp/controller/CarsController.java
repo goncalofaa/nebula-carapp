@@ -33,10 +33,10 @@ public class CarsController {
         return new ResponseEntity<>(responseObject, HttpStatus.CREATED);
     }
 
-//    @GetMapping("/admin")
-//    public List<Car> getCars() {
-//        return carRepository.findAll();
-//    }
+      @GetMapping("/admin")
+      public ResponseEntity<Object> getCars() {
+          return new ResponseEntity<>(carSevice.getAllCars(), HttpStatus.OK) ;
+      }
 //
 //    @DeleteMapping("/admin/{carId}")
 //    public ResponseEntity<String> deleteCarById(@PathVariable int carId) {
