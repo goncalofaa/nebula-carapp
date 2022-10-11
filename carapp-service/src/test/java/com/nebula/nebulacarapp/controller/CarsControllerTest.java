@@ -43,4 +43,11 @@ public class CarsControllerTest {
         verify(carSevice, times(1)).getAllCars();
     }
 
+    @Test
+    void whenDeleteCarByIdCalled_return204_deleteByIdCalled(){
+        response = carsController.deleteCarById(1);
+        Assertions.assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+        verify(carSevice, times(1)).deleteById(1);
+    }
+
 }
