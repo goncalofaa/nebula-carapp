@@ -33,14 +33,14 @@ public class CarsController {
         return new ResponseEntity<>(responseObject, HttpStatus.CREATED);
     }
 
-      @GetMapping("/admin")
-      public ResponseEntity<Object> getCars() {
-          return new ResponseEntity<>(carSevice.getAllCars(), HttpStatus.OK) ;
-      }
+    @GetMapping("/admin")
+    public ResponseEntity<Object> getCars() {
+        return new ResponseEntity<>(carSevice.getAllCars(), HttpStatus.OK) ;
+    }
 
-      @DeleteMapping("/admin/{carId}")
-      public ResponseEntity<Object> deleteCarById(@PathVariable int carId) {
+    @DeleteMapping("/admin/{carId}")
+    public ResponseEntity<Object> deleteCarById(@PathVariable int carId) {
         carSevice.deleteById(carId);
         return new ResponseEntity<>( HttpStatus.valueOf(204));
-      }
+    }
 }

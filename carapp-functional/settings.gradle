@@ -1,2 +1,3 @@
 rootProject.name = 'carapp-functional'
+includeBuild '../carapp-service'
 

@@ -5,15 +5,19 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import io.restassured.response.ResponseBody;
 import io.restassured.specification.RequestSpecification;
 import org.junit.Assert;
+import org.springframework.http.StreamingHttpOutputMessage;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionInterceptor;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import static io.restassured.RestAssured.given;
 
 @Transactional
 public class HttpRequestsSteps {
@@ -24,7 +28,7 @@ public class HttpRequestsSteps {
 
     @When("A get request is made to {string} endpoint")
     public void requestTo(String endpoint){
-        RequestSpecification request = RestAssured.given();
+        RequestSpecification request = given();
         request.header("Content-Type", "application/json");
         response = request.get(endpoint);
     }
@@ -42,7 +46,7 @@ public class HttpRequestsSteps {
         bodyList.add(bodyMap);
         Gson gson = new Gson();
         String bodyJson = gson.toJson(bodyList);
-        RequestSpecification request = RestAssured.given().body(bodyJson);
+        RequestSpecification request = given().body(bodyJson);
         request.header("Content-Type", "application/json");
         response = request.post(endpoint);
     }
@@ -58,5 +62,13 @@ public class HttpRequestsSteps {
         Assert.assertEquals(code, response.getStatusCode());
     }
 
-
+    @Then("A delete request is made to the last inserted car")
+    public void deleteRequest() {
+        String endpoint = "cars/admin";
+        RequestSpecification request = given();
+        request.header("Content-Type", "application/json");
+        List<String> body = Arrays.stream(request.when().get(endpoint).then().extract().response().body().asPrettyString().split("\"id\":")).toList();
+        String id = body.get(body.size() - 1).split(",")[0];
+        response = request.delete(endpoint+"/"+id);
+    }
 }

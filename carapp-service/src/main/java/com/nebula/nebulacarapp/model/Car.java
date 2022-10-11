@@ -40,6 +40,19 @@ public class Car {
         return model;
     }
 
+    @Override
+    public String toString() {
+        return "Car{" +
+                "id=" + id +
+                ", brand='" + brand + '\'' +
+                ", model='" + model + '\'' +
+                ", year=" + year +
+                ", price=" + price +
+                ", mileage=" + mileage +
+                ", colour='" + colour + '\'' +
+                '}';
+    }
+
     public int getYear() {
         return year;
     }
