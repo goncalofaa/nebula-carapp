@@ -27,7 +27,6 @@ public class HttpRequestsSteps {
 
     private static Response response;
     private static String jsonString;
-    private static String responseBody;
 
     @When("A get request is made to {string} endpoint")
     public void requestTo(String endpoint){
