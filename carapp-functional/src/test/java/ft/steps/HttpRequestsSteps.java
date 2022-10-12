@@ -1,6 +1,7 @@
 package ft.steps;
 
 import com.google.gson.Gson;
+import io.cucumber.java.After;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -26,13 +27,14 @@ public class HttpRequestsSteps {
 
     private static Response response;
     private static String jsonString;
-
+    private static String responseBody;
 
     @When("A get request is made to {string} endpoint")
     public void requestTo(String endpoint){
         RequestSpecification request = given();
         request.header("Content-Type", "application/json");
         response = request.get(endpoint);
+
     }
 
     @When("A post request is made to {string} endpoint with a car being {string}")
@@ -59,6 +61,13 @@ public class HttpRequestsSteps {
         Assert.assertEquals(body,jsonString);
     }
 
+    @Then("A list of {int} cars is received")
+    public void numberOfCarsReceived(int numberOfCars){
+        List<String> noSquareBrackets = Arrays.stream(response.body().asPrettyString().split("\\[(.*?)\\]")).toList();
+        List<String> objectSeparated = Arrays.stream(noSquareBrackets.toString().split("},")).toList();
+        Assert.assertEquals(numberOfCars, objectSeparated.size());
+    }
+
     @And("A status code of {int} is received")
     public void statusCodeReceived(int code){
         Assert.assertEquals(code, response.getStatusCode());
@@ -76,6 +85,18 @@ public class HttpRequestsSteps {
 
     @Given("All Test data has been deleted")
     public void deleteTestData() {
+        String endpoint = "cars/admin/testData";
+        RequestSpecification request = given();
+        request.header("Content-Type", "application/json");
+        Map<String, String> carsToDeleteBody = new HashMap<>();
+        carsToDeleteBody.put("brand", "TestBrand");
+        carsToDeleteBody.put("model", "TestModel");
+        request.body(carsToDeleteBody);
+        response = request.delete(endpoint);
+
+    }
+    @After
+    public void deleteTestDataAfter() {
         String endpoint = "cars/admin/testData";
         RequestSpecification request = given();
         request.header("Content-Type", "application/json");
