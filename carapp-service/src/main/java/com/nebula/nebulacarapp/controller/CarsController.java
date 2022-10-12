@@ -1,7 +1,7 @@
 package com.nebula.nebulacarapp.controller;
 
 import com.nebula.nebulacarapp.model.Car;
-import com.nebula.nebulacarapp.service.CarSevice;
+import com.nebula.nebulacarapp.service.CarService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,13 +19,13 @@ import java.util.Map;
 public class CarsController {
 
     @Autowired
-    private CarSevice carSevice;
+    private CarService carService;
 
 
 
     @PostMapping(value = "/admin", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> postCars(@RequestBody List<Car> cars) {
-        carSevice.saveCars(cars);
+        carService.saveCars(cars);
         Map<String,String> responseObject = new HashMap<>();
         responseObject.put("description", "Database updated");
         return new ResponseEntity<>(responseObject, HttpStatus.CREATED);
@@ -41,9 +41,9 @@ public class CarsController {
                 paramValue = entry.getValue();
 
             }
-            return new ResponseEntity<>(carSevice.getQueriedCars(paramKey, paramValue), HttpStatus.OK) ;
+            return new ResponseEntity<>(carService.getQueriedCars(paramKey, paramValue), HttpStatus.OK) ;
         }else{
-            return new ResponseEntity<>(carSevice.getAllCars(), HttpStatus.OK) ;
+            return new ResponseEntity<>(carService.getAllCars(), HttpStatus.OK) ;
         }
 
 
@@ -51,14 +51,14 @@ public class CarsController {
 
     @DeleteMapping("/admin/{carId}")
     public ResponseEntity<Object> deleteCarById(@PathVariable int carId) {
-        carSevice.deleteById(carId);
+        carService.deleteById(carId);
         return new ResponseEntity<>( HttpStatus.valueOf(204));
     }
 
     @DeleteMapping("/admin/testData")
     public ResponseEntity<Object> deleteTestData(@RequestBody Map<String,String> carsToDeleteObject) {
 
-        carSevice.deleteTestData(carsToDeleteObject);
+        carService.deleteTestData(carsToDeleteObject);
         return new ResponseEntity<>( HttpStatus.valueOf(204));
     }
 

@@ -12,12 +12,11 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import static java.util.Comparator.comparing;
 
 @Service
-public class CarSevice {
+public class CarService {
     @Autowired
     private MongoTemplate mongoTemplate;
     @Autowired
