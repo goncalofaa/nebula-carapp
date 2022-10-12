@@ -18,13 +18,16 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
     testImplementation 'io.cucumber:cucumber-java:7.5.0'
     testImplementation 'io.cucumber:cucumber-junit:7.5.0'
+    implementation 'io.cucumber:cucumber-spring:2.1.0'
     testImplementation 'io.rest-assured:rest-assured:5.2.0'
     implementation 'com.google.code.gson:gson:2.9.1'
     implementation 'org.springframework:spring-tx:5.3.23'
     testImplementation 'io.rest-assured:spring-mock-mvc:5.2.0'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test:2.7.4'
+    implementation 'io.cucumber:cucumber-spring:7.8.1'
 }
 
 test {
-    useJUnitPlatform()
+    useJUnit()
 }
 
