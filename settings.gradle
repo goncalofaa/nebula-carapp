@@ -1,1 +1,3 @@
 rootProject.name = 'nebula-carapp'
+include 'carpapp-service'
+include 'carapp-functional'
