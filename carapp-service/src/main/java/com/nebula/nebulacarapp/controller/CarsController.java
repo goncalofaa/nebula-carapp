@@ -42,9 +42,11 @@ public class CarsController {
 
             }
             return new ResponseEntity<>(carSevice.getQueriedCars(paramKey, paramValue), HttpStatus.OK) ;
+        }else{
+            return new ResponseEntity<>(carSevice.getAllCars(), HttpStatus.OK) ;
         }
 
-        return new ResponseEntity<>(carSevice.getAllCars(), HttpStatus.OK) ;
+
     }
 
     @DeleteMapping("/admin/{carId}")

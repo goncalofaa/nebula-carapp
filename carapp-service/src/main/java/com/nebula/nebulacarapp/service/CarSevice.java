@@ -9,9 +9,12 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import static java.util.Comparator.comparing;
 
 @Service
 public class CarSevice {
@@ -21,6 +24,15 @@ public class CarSevice {
     private CarRepository carRepository;
     @Autowired
     private SequenceGeneratorService sequenceGeneratorService;
+
+
+    private static Integer TryParseInt(String possibleInt) {
+        try {
+            return Integer.parseInt(possibleInt);
+        } catch (NumberFormatException ex) {
+            return null;
+        }
+    }
 
     public void saveCars(List<Car> carsList){
         for (Car car: carsList){
@@ -33,13 +45,6 @@ public class CarSevice {
         return carRepository.findAll();
     }
 
-    private static Integer TryParseInt(String possibleInt) {
-        try {
-            return Integer.parseInt(possibleInt);
-        } catch (NumberFormatException ex) {
-            return null;
-        }
-    }
 
     public List<Car> getQueriedCars(String paramKey, String paramValue) {
         Integer tryParseIntParamValue = TryParseInt(paramValue);
@@ -47,6 +52,7 @@ public class CarSevice {
         Criteria dynamicCriteria = Criteria.where(paramKey).is(tryParseIntParamValue != null ? tryParseIntParamValue : paramValue);
         dynamicQuery.addCriteria(dynamicCriteria);
         List<Car> result = mongoTemplate.find(dynamicQuery, Car.class, "cars");
+        Collections.sort(result, comparing(Car::getYear).reversed());
         return result;
     }
 
