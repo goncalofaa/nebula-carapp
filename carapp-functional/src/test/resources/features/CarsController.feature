@@ -16,3 +16,16 @@ Feature: Functional Tests for cars endpoint
     Then A delete request is made to the last inserted car
     And A status code of 204 is received
 
+  Scenario: http get request to cars/admin endpoint with params
+    When A post request is made to "cars/admin" endpoint with a car being "TestBrand, TestModel, 2022, 80000, 10000, black"
+    When A get request is made to "cars/admin/?brand=TestBrand" endpoint
+#    Then A body of "[{\"id\":\"\\(\\d+\\)$\",\"brand\":\"TestBrand\",\"model\":\"TestModel\",\"year\":2022,\"price\":80000,\"mileage\":10000,\"colour\":\"black\"}]" is received
+    Then A list of 1 cars is received
+    When A post request is made to "cars/admin" endpoint with a car being "TestBrand, TestModel, 2022, 80000, 10000, black"
+    When A post request is made to "cars/admin" endpoint with a car being "TestBrand, TestModel, 2022, 80000, 10000, black"
+    When A get request is made to "cars/admin/?brand=TestBrand" endpoint
+    Then A list of 3 cars is received
+    And A status code of 200 is received
+
+
+

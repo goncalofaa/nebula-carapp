@@ -3,18 +3,35 @@ package com.nebula.nebulacarapp.service;
 import com.nebula.nebulacarapp.model.Car;
 import com.nebula.nebulacarapp.repository.CarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.repository.Query;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
+
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import static java.util.Comparator.comparing;
+
 @Service
-public class CarSevice {
+public class CarService {
+    @Autowired
+    private MongoTemplate mongoTemplate;
     @Autowired
     private CarRepository carRepository;
     @Autowired
     private SequenceGeneratorService sequenceGeneratorService;
+
+
+    private static Integer TryParseInt(String possibleInt) {
+        try {
+            return Integer.parseInt(possibleInt);
+        } catch (NumberFormatException ex) {
+            return null;
+        }
+    }
 
     public void saveCars(List<Car> carsList){
         for (Car car: carsList){
@@ -27,6 +44,17 @@ public class CarSevice {
         return carRepository.findAll();
     }
 
+
+    public List<Car> getQueriedCars(String paramKey, String paramValue) {
+        Integer tryParseIntParamValue = TryParseInt(paramValue);
+        Query dynamicQuery = new Query();
+        Criteria dynamicCriteria = Criteria.where(paramKey).is(tryParseIntParamValue != null ? tryParseIntParamValue : paramValue);
+        dynamicQuery.addCriteria(dynamicCriteria);
+        List<Car> result = mongoTemplate.find(dynamicQuery, Car.class, "cars");
+        Collections.sort(result, comparing(Car::getYear).reversed());
+        return result;
+    }
+
     public void deleteById(int id){
         carRepository.deleteById(id);
     }
@@ -37,5 +65,6 @@ public class CarSevice {
         List<Car> carsToDelete = carRepository.findByBrandAndModel(brand, model);
         carRepository.deleteAll(carsToDelete);
     }
+
 
 }

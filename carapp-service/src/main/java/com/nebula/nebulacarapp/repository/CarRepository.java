@@ -9,4 +9,6 @@ import java.util.List;
 public interface CarRepository extends MongoRepository<Car, Integer> {
     @Query(value = "{ 'brand' : ?0, 'model' : ?1 }")
     List<Car> findByBrandAndModel(String brand, String model);
+
+
 }
