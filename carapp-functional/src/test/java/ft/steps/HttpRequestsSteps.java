@@ -1,7 +1,8 @@
-package steps;
+package ft.steps;
 
 import com.google.gson.Gson;
 import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.RestAssured;
@@ -11,6 +12,7 @@ import io.restassured.response.ResponseBody;
 import io.restassured.specification.RequestSpecification;
 import org.junit.Assert;
 import org.springframework.http.StreamingHttpOutputMessage;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionInterceptor;
@@ -19,7 +21,7 @@ import java.util.*;
 
 import static io.restassured.RestAssured.given;
 
-@Transactional
+
 public class HttpRequestsSteps {
 
     private static Response response;
@@ -70,5 +72,18 @@ public class HttpRequestsSteps {
         List<String> body = Arrays.stream(request.when().get(endpoint).then().extract().response().body().asPrettyString().split("\"id\":")).toList();
         String id = body.get(body.size() - 1).split(",")[0];
         response = request.delete(endpoint+"/"+id);
+    }
+
+    @Given("All Test data has been deleted")
+    public void deleteTestData() {
+        String endpoint = "cars/admin/testData";
+        RequestSpecification request = given();
+        request.header("Content-Type", "application/json");
+        Map<String, String> carsToDeleteBody = new HashMap<>();
+        carsToDeleteBody.put("brand", "TestBrand");
+        carsToDeleteBody.put("model", "TestModel");
+        request.body(carsToDeleteBody);
+        response = request.delete(endpoint);
+
     }
 }

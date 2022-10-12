@@ -43,4 +43,11 @@ public class CarsController {
         carSevice.deleteById(carId);
         return new ResponseEntity<>( HttpStatus.valueOf(204));
     }
+
+    @DeleteMapping("/admin/testData")
+    public ResponseEntity<Object> deleteTestData(@RequestBody Map<String,String> carsToDeleteObject) {
+
+        carSevice.deleteTestData(carsToDeleteObject);
+        return new ResponseEntity<>( HttpStatus.valueOf(204));
+    }
 }

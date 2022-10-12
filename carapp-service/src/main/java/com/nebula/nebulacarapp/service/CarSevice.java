@@ -3,9 +3,11 @@ package com.nebula.nebulacarapp.service;
 import com.nebula.nebulacarapp.model.Car;
 import com.nebula.nebulacarapp.repository.CarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class CarSevice {
@@ -29,5 +31,11 @@ public class CarSevice {
         carRepository.deleteById(id);
     }
 
+    public void deleteTestData(Map<String,String> carsToDeleteObject) {
+        String model = carsToDeleteObject.get("model");
+        String brand = carsToDeleteObject.get("brand");
+        List<Car> carsToDelete = carRepository.findByBrandAndModel(brand, model);
+        carRepository.deleteAll(carsToDelete);
+    }
 
 }
