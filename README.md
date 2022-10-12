@@ -34,3 +34,14 @@ use <YOUR DB NAME>
 ```
 
 
+#### To list collections
+```
+show collections
+````
+
+#### To drop collection
+```
+db.<COLLECTION NAME>.drop()
+```
+
+
