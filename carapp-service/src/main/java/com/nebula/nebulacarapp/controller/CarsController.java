@@ -2,19 +2,17 @@ package com.nebula.nebulacarapp.controller;
 
 import com.nebula.nebulacarapp.model.Car;
 import com.nebula.nebulacarapp.service.CarSevice;
-import com.nebula.nebulacarapp.service.SequenceGeneratorService;
-import com.nebula.nebulacarapp.repository.CarRepository;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/cars")
@@ -33,8 +31,19 @@ public class CarsController {
         return new ResponseEntity<>(responseObject, HttpStatus.CREATED);
     }
 
-    @GetMapping("/admin")
-    public ResponseEntity<Object> getCars() {
+    @GetMapping(path = {"/admin", "/admin/{allParams}"})
+    public ResponseEntity<Object> getCars(@RequestParam(required = false) @NotNull Map<String,String> allParams) {
+        if (allParams != null && allParams.size() > 0) {
+            String paramKey = "";
+            String paramValue = "";
+            for (Map.Entry<String, String> entry : allParams.entrySet()) {
+                paramKey = entry.getKey();
+                paramValue = entry.getValue();
+
+            }
+            return new ResponseEntity<>(carSevice.getQueriedCars(paramKey, paramValue), HttpStatus.OK) ;
+        }
+
         return new ResponseEntity<>(carSevice.getAllCars(), HttpStatus.OK) ;
     }
 
@@ -50,4 +59,6 @@ public class CarsController {
         carSevice.deleteTestData(carsToDeleteObject);
         return new ResponseEntity<>( HttpStatus.valueOf(204));
     }
+
+
 }

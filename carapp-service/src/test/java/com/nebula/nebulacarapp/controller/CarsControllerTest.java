@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.internal.matchers.Null;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +39,7 @@ public class CarsControllerTest {
 
     @Test
     void whenGetCarsCalled_return200_getAllCarsCalled(){
-        response = carsController.getCars();
+        response = carsController.getCars(null);
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         verify(carSevice, times(1)).getAllCars();
     }
