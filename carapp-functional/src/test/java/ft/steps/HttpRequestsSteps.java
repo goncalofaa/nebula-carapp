@@ -44,8 +44,8 @@ public class HttpRequestsSteps {
 
     }
 
-    @When("A post request is made to {string} endpoint with a car being {string}")
-    public void requestToWithBody(String endpoint, String body){
+    @When("A {string} request is made to {string} endpoint with a car being {string}")
+    public void requestToWithBody(String requestType, String endpoint, String body){
         List<Object> bodyList = new ArrayList<>();
         Map<String, Object> bodyMap = new HashMap<>();
         bodyMap.put("brand", body.split(", ")[0]);
@@ -57,9 +57,18 @@ public class HttpRequestsSteps {
         bodyList.add(bodyMap);
         Gson gson = new Gson();
         String bodyJson = gson.toJson(bodyList);
-        RequestSpecification request = given().body(bodyJson);
-        request.header("Content-Type", "application/json");
-        response = request.post(endpoint);
+
+        if (requestType.matches("post")){
+            RequestSpecification request = given().body(bodyJson);
+            request.header("Content-Type", "application/json");
+            response = request.post(endpoint);
+        }
+        if (requestType.matches("put")){
+            RequestSpecification request = given().body(bodyMap);
+            request.header("Content-Type", "application/json");
+            response = request.put(endpoint);
+        }
+
     }
 
     @Then("A body of {string} is received")
