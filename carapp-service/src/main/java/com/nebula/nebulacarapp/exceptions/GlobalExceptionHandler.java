@@ -19,8 +19,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(MongoWriteException.class)
     public ResponseEntity duplicateKeyException(
-            MongoWriteException ex) {
-        System.out.println(ex);
+            MongoWriteException mongoWriteException) {
+
+
         Map<String, Object> body = new HashMap<>();
         body.put("description", "Car already exists");
 

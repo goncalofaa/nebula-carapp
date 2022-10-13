@@ -88,8 +88,7 @@ public class HttpRequestsSteps {
         RequestSpecification request = given();
         request.header("Content-Type", "application/json");
         Map<String, String> carsToDeleteBody = new HashMap<>();
-        carsToDeleteBody.put("brand", "TestBrand");
-        carsToDeleteBody.put("model", "TestModel");
+        carsToDeleteBody.put("model", "TestModelDontChangeMe");
         request.body(carsToDeleteBody);
         response = request.delete(endpoint);
 
@@ -100,8 +99,7 @@ public class HttpRequestsSteps {
         RequestSpecification request = given();
         request.header("Content-Type", "application/json");
         Map<String, String> carsToDeleteBody = new HashMap<>();
-        carsToDeleteBody.put("brand", "TestBrand");
-        carsToDeleteBody.put("model", "TestModel");
+        carsToDeleteBody.put("model", "TestModelDontChangeMe");
         request.body(carsToDeleteBody);
         response = request.delete(endpoint);
 

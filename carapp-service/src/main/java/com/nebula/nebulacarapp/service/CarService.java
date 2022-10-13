@@ -43,14 +43,11 @@ public class CarService {
     public void saveCars(List<Car> carsList){
 
         for (Car car: carsList) {
-            try{
-                car.setId(sequenceGeneratorService.generateSequence(Car.SEQUENCE_NAME));
-                carRepository.insert(car);
-            }
-            catch (MongoWriteException e){
-                globalExceptionHandler.duplicateKeyException(e);
-            }
+            car.setId(sequenceGeneratorService.generateSequence(Car.SEQUENCE_NAME));
+            carRepository.insert(car);
+
         }
+
 
 
 
@@ -78,8 +75,8 @@ public class CarService {
 
     public void deleteTestData(Map<String,String> carsToDeleteObject) {
         String model = carsToDeleteObject.get("model");
-        String brand = carsToDeleteObject.get("brand");
-        List<Car> carsToDelete = carRepository.findByBrandAndModel(brand, model);
+
+        List<Car> carsToDelete = carRepository.findByModel(model);
         carRepository.deleteAll(carsToDelete);
     }
 
