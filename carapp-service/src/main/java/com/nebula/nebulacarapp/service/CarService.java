@@ -1,5 +1,10 @@
 package com.nebula.nebulacarapp.service;
 
+import com.mongodb.DuplicateKeyException;
+import com.mongodb.MongoBulkWriteException;
+import com.mongodb.MongoWriteException;
+import com.mongodb.bulk.BulkWriteError;
+import com.nebula.nebulacarapp.exceptions.GlobalExceptionHandler;
 import com.nebula.nebulacarapp.model.Car;
 import com.nebula.nebulacarapp.repository.CarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +26,12 @@ public class CarService {
     private MongoTemplate mongoTemplate;
     @Autowired
     private CarRepository carRepository;
+
+    @Autowired
+    private GlobalExceptionHandler globalExceptionHandler;
+
     @Autowired
     private SequenceGeneratorService sequenceGeneratorService;
-
-
     private static Integer TryParseInt(String possibleInt) {
         try {
             return Integer.parseInt(possibleInt);
@@ -34,10 +41,17 @@ public class CarService {
     }
 
     public void saveCars(List<Car> carsList){
-        for (Car car: carsList){
+
+        for (Car car: carsList) {
             car.setId(sequenceGeneratorService.generateSequence(Car.SEQUENCE_NAME));
+            carRepository.insert(car);
+
         }
-        carRepository.saveAll(carsList);
+
+
+
+
+
     }
 
     public List<Car> getAllCars(){
@@ -61,8 +75,8 @@ public class CarService {
 
     public void deleteTestData(Map<String,String> carsToDeleteObject) {
         String model = carsToDeleteObject.get("model");
-        String brand = carsToDeleteObject.get("brand");
-        List<Car> carsToDelete = carRepository.findByBrandAndModel(brand, model);
+
+        List<Car> carsToDelete = carRepository.findByModel(model);
         carRepository.deleteAll(carsToDelete);
     }
 

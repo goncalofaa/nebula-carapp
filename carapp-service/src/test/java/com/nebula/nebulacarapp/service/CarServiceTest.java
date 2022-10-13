@@ -38,7 +38,7 @@ public class CarServiceTest {
         Car testCar1 = new Car("1","1",1,1,1,"1");
         carsList.add(testCar1);
         carService.saveCars(carsList);
-        verify(carRepository, times(1)).saveAll(carsList);
+        verify(carRepository, times(1)).insert(testCar1);
 
     }
 
