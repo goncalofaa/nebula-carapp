@@ -44,17 +44,10 @@ public class CarService {
     }
 
     public void saveCars(List<Car> carsList){
-
         for (Car car: carsList) {
             car.setId(sequenceGeneratorService.generateSequence(Car.SEQUENCE_NAME));
             carRepository.insert(car);
-
         }
-
-
-
-
-
     }
 
     public List<Car> getAllCars(){
@@ -105,15 +98,18 @@ public class CarService {
         carRepository.deleteAll(carsToDelete);
     }
 
-
+@SneakyThrows
     public void updateCar(Car car) {
-        Query dynamicQuery = new Query();
-        dynamicQuery.addCriteria(new Criteria().andOperator(Criteria.where("brand").is(car.getBrand()),
-                Criteria.where("model").is(car.getModel())));
-        Update updateDefinition = new Update().set("year", car.getYear()).set("price", car.getPrice()).set("mileage", car.getMileage());
+        if(carRepository.findByModelAndBrand(car.getModel(),car.getBrand()) == null){
+            throw new CustomException("No car matching");
+        }else {
+            Query dynamicQuery = new Query();
+            dynamicQuery.addCriteria(new Criteria().andOperator(Criteria.where("brand").is(car.getBrand()),
+                    Criteria.where("model").is(car.getModel())));
+            Update updateDefinition = new Update().set("year", car.getYear()).set("price", car.getPrice()).set("mileage", car.getMileage());
 
-        mongoTemplate.findAndModify(dynamicQuery, updateDefinition, Car.class);
-
+            mongoTemplate.findAndModify(dynamicQuery, updateDefinition, Car.class);
+        }
 
     }
 }
