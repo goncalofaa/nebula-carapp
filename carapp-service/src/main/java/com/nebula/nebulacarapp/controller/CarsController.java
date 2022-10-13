@@ -2,20 +2,25 @@ package com.nebula.nebulacarapp.controller;
 
 import com.nebula.nebulacarapp.model.Car;
 import com.nebula.nebulacarapp.service.CarService;
-import org.jetbrains.annotations.NotNull;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/cars")
+@Validated
 public class CarsController {
 
     @Autowired
@@ -24,7 +29,7 @@ public class CarsController {
 
 
     @PostMapping(value = "/admin", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> postCars(@RequestBody List<Car> cars) {
+    public ResponseEntity<Object> postCars(@NotNull @NotEmpty @RequestBody List<@Valid Car> cars) {
         carService.saveCars(cars);
         Map<String,String> responseObject = new HashMap<>();
         responseObject.put("description", "Database updated");

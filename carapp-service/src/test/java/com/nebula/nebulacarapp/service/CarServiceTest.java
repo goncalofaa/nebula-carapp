@@ -27,9 +27,6 @@ public class CarServiceTest {
     private CarRepository carRepository;
 
     @Mock
-    private SequenceGeneratorService sequenceGeneratorService;
-
-    @Mock
     private MongoTemplate mongoTemplate;
 
     @Test
