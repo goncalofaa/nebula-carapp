@@ -29,6 +29,16 @@ Feature: Functional Tests for cars endpoint
     Then A delete request is made to the last inserted car
     And A status code of 204 is received
 
+  Scenario: http delete request to cars/admin endpoint with wrong id
+    When A delete request is made to "cars/admin/12312" endpoint
+    Then A body of "{\"description\":\"Incorrect id provided\"}" is received
+    And A status code of 400 is received
+
+  Scenario: http delete request to cars/admin endpoint with no id
+    When A delete request is made to "cars/admin" endpoint
+    Then A body of "{\"description\":\"Incorrect id provided\"}" is received
+    And A status code of 400 is received
+
   Scenario: http get request to cars/admin endpoint with params
     When A post request is made to "cars/admin" endpoint with a car being "TestBrand1, TestModelDontChangeMe, 2022, 80000, 10000, black"
     When A get request is made to "cars/admin/?brand=TestBrand" endpoint

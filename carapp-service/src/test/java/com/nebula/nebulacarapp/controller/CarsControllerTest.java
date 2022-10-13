@@ -95,6 +95,13 @@ public class CarsControllerTest {
     }
 
     @Test
+    void whenDeleteNotAllowedCalled_return404(){
+        response = carsController.deleteNotAllowed();
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+
+    }
+
+    @Test
     void whenGetCarsCalledWIthParams_return200_getQueriedCarsCalled(){
         Map<String, String> params = new HashMap<>();
         params.put("body", "bodyExample");

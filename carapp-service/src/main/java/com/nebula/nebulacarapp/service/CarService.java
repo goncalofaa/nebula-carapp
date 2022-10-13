@@ -87,9 +87,14 @@ public class CarService {
 
 
     }
-
+    @SneakyThrows
     public void deleteById(int id){
-        carRepository.deleteById(id);
+        if(carRepository.findById(id).isEmpty()){
+            throw new CustomException("Id not matching");
+        }else{
+            carRepository.deleteById(id);
+        }
+
     }
 
     public void deleteTestData(Map<String,String> carsToDeleteObject) {

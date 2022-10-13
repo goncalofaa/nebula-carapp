@@ -36,6 +36,14 @@ public class HttpRequestsSteps {
 
     }
 
+    @When("A delete request is made to {string} endpoint")
+    public void deleteRequestTo(String endpoint){
+        RequestSpecification request = given();
+        request.header("Content-Type", "application/json");
+        response = request.delete(endpoint);
+
+    }
+
     @When("A post request is made to {string} endpoint with a car being {string}")
     public void requestToWithBody(String endpoint, String body){
         List<Object> bodyList = new ArrayList<>();
