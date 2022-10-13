@@ -78,9 +78,14 @@ public class CarServiceTest {
                 .isInstanceOf(CustomException.class)
                 .hasMessage("Parameters not recognized");
 
+    }
 
+    @Test
+    void whenDeleteByIdWIthWrongIdCalled_throwException(){
 
-
+        assertThatThrownBy(() -> carService.deleteById(111111))
+                .isInstanceOf(CustomException.class)
+                .hasMessage("Id not matching");
 
     }
 }

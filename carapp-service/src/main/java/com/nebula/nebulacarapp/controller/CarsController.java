@@ -64,9 +64,18 @@ public class CarsController {
     }
 
     @DeleteMapping("/admin/{carId}")
-    public ResponseEntity<Object> deleteCarById(@PathVariable int carId) {
+    public ResponseEntity<Object> deleteCarById(@PathVariable(required = false) int carId) {
+
+
         carService.deleteById(carId);
         return new ResponseEntity<>( HttpStatus.valueOf(204));
+    }
+    @DeleteMapping("/admin")
+    public ResponseEntity<Object> deleteNotAllowed() {
+        Map<String,String> responseObject = new HashMap<>();
+        responseObject.put("description", "Incorrect id provided");
+
+        return new ResponseEntity<>(responseObject, HttpStatus.BAD_REQUEST);
     }
 
     @DeleteMapping("/admin/testData")
