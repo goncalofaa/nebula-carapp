@@ -99,16 +99,20 @@ public class CarService {
     }
 
 @SneakyThrows
-    public void updateCar(Car car) {
-        if(carRepository.findByModelAndBrand(car.getModel(),car.getBrand()) == null){
-            throw new CustomException("No car matching");
-        }else {
-            Query dynamicQuery = new Query();
-            dynamicQuery.addCriteria(new Criteria().andOperator(Criteria.where("brand").is(car.getBrand()),
-                    Criteria.where("model").is(car.getModel())));
-            Update updateDefinition = new Update().set("year", car.getYear()).set("price", car.getPrice()).set("mileage", car.getMileage());
+    public void updateCar(List<Car> cars) {
 
-            mongoTemplate.findAndModify(dynamicQuery, updateDefinition, Car.class);
+            for (Car car:cars) {
+                if(carRepository.findByModelAndBrand(car.getModel(),car.getBrand()) == null){
+                    throw new CustomException("No car matching");
+                }else {
+                Query dynamicQuery = new Query();
+                dynamicQuery.addCriteria(new Criteria().andOperator(Criteria.where("brand").is(car.getBrand()),
+                        Criteria.where("model").is(car.getModel())));
+                Update updateDefinition = new Update().set("year", car.getYear()).set("price", car.getPrice()).set("mileage", car.getMileage());
+
+                mongoTemplate.findAndModify(dynamicQuery, updateDefinition, Car.class);
+            }
+
         }
 
     }

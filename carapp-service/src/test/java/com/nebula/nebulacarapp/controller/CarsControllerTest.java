@@ -117,12 +117,11 @@ public class CarsControllerTest {
         List<Car> carsList = new ArrayList<>();
         carsList.add(testCar1);
         response = carsController.postCars(carsList);
-
-        testCar1.setPrice(10);
-        response = carsController.updateCar(testCar1);
+        carsList.get(0).setPrice(1000);
+        response = carsController.updateCar(carsList);
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         verify(carService, times(1)).saveCars(carsList);
-        verify(carService, times(1)).updateCar(testCar1);
+        verify(carService, times(1)).updateCar(carsList);
     }
 
 
