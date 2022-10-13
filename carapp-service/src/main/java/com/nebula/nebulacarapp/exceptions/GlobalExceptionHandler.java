@@ -1,7 +1,5 @@
 package com.nebula.nebulacarapp.exceptions;
 
-import com.mongodb.DuplicateKeyException;
-import com.mongodb.MongoBulkWriteException;
 import com.mongodb.MongoWriteException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +24,18 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         body.put("description", "Car already exists");
 
         return new ResponseEntity<>(body, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(CustomException.class)
+    public ResponseEntity customException(
+            CustomException customException) {
+        Map<String, Object> body = new HashMap<>();
+        if (customException.getMessage() == "Extra parameters are present"|| customException.getMessage() == "Parameters not recognized")  {
+            body.put("description", "Incorrect query parameter provided");
+        }else{
+            body.put("description", "General Runtime Exception");
+        }
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)

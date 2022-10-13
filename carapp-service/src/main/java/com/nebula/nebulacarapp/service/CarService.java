@@ -4,9 +4,11 @@ import com.mongodb.DuplicateKeyException;
 import com.mongodb.MongoBulkWriteException;
 import com.mongodb.MongoWriteException;
 import com.mongodb.bulk.BulkWriteError;
+import com.nebula.nebulacarapp.exceptions.CustomException;
 import com.nebula.nebulacarapp.exceptions.GlobalExceptionHandler;
 import com.nebula.nebulacarapp.model.Car;
 import com.nebula.nebulacarapp.repository.CarRepository;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -59,14 +61,31 @@ public class CarService {
     }
 
 
+    @SneakyThrows
     public List<Car> getQueriedCars(String paramKey, String paramValue) {
         Integer tryParseIntParamValue = TryParseInt(paramValue);
-        Query dynamicQuery = new Query();
-        Criteria dynamicCriteria = Criteria.where(paramKey).is(tryParseIntParamValue != null ? tryParseIntParamValue : paramValue);
-        dynamicQuery.addCriteria(dynamicCriteria);
-        List<Car> result = mongoTemplate.find(dynamicQuery, Car.class, "cars");
-        Collections.sort(result, comparing(Car::getYear).reversed());
-        return result;
+        if(!paramKey.matches("brand|model|year|price|mileage|colour")){
+            throw new CustomException("Parameters not recognized");
+        }else{
+            if(paramKey.matches("year|price|mileage") && tryParseIntParamValue == null){
+                throw new CustomException("Parameters not recognized");
+            }
+            else if(paramKey.matches("brand|model|colour") && tryParseIntParamValue != null){
+                throw new CustomException("Parameters not recognized");
+            }
+            else if (paramValue.contains(" ") || !paramValue.matches("^[a-zA-Z0-9_\\-.]*$")){
+                throw new CustomException("Parameters not recognized");
+            }else{
+                Query dynamicQuery = new Query();
+                Criteria dynamicCriteria = Criteria.where(paramKey).is(tryParseIntParamValue != null ? tryParseIntParamValue : paramValue);
+                dynamicQuery.addCriteria(dynamicCriteria);
+                List<Car> result = mongoTemplate.find(dynamicQuery, Car.class, "cars");
+                Collections.sort(result, comparing(Car::getYear).reversed());
+                return result;
+            }
+        }
+
+
     }
 
     public void deleteById(int id){

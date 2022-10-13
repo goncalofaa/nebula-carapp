@@ -1,8 +1,10 @@
 package com.nebula.nebulacarapp.controller;
 
+import com.nebula.nebulacarapp.exceptions.CustomException;
 import com.nebula.nebulacarapp.model.Car;
 import com.nebula.nebulacarapp.service.CarService;
 
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -28,6 +30,7 @@ public class CarsController {
 
 
 
+
     @PostMapping(value = "/admin", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> postCars(@NotNull @NotEmpty @RequestBody List<@Valid Car> cars) {
         carService.saveCars(cars);
@@ -36,17 +39,23 @@ public class CarsController {
         return new ResponseEntity<>(responseObject, HttpStatus.CREATED);
     }
 
+    @SneakyThrows
     @GetMapping(path = {"/admin", "/admin/{allParams}"})
     public ResponseEntity<Object> getCars(@RequestParam(required = false) @NotNull Map<String,String> allParams) {
         if (allParams != null && allParams.size() > 0) {
-            String paramKey = "";
-            String paramValue = "";
-            for (Map.Entry<String, String> entry : allParams.entrySet()) {
-                paramKey = entry.getKey();
-                paramValue = entry.getValue();
+            if(allParams.size() > 1){
+                throw new CustomException("Extra parameters are present");
+            }else{
+                String paramKey = "";
+                String paramValue = "";
+                for (Map.Entry<String, String> entry : allParams.entrySet()) {
+                    paramKey = entry.getKey();
+                    paramValue = entry.getValue();
 
+                }
+                return new ResponseEntity<>(carService.getQueriedCars(paramKey, paramValue), HttpStatus.OK) ;
             }
-            return new ResponseEntity<>(carService.getQueriedCars(paramKey, paramValue), HttpStatus.OK) ;
+
         }else{
             return new ResponseEntity<>(carService.getAllCars(), HttpStatus.OK) ;
         }
