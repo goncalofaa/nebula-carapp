@@ -110,6 +110,21 @@ public class CarsControllerTest {
         verify(carService, times(1)).getQueriedCars("body", "bodyExample");
     }
 
+    @Test
+    void whenUpdateCarCalled_return200_serviceUpdateCarCalled(){
+
+        Car testCar1 = new Car("bmw", "x5",2000,50000, 15000, "black");
+        List<Car> carsList = new ArrayList<>();
+        carsList.add(testCar1);
+        response = carsController.postCars(carsList);
+
+        testCar1.setPrice(10);
+        response = carsController.updateCar(testCar1);
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        verify(carService, times(1)).saveCars(carsList);
+        verify(carService, times(1)).updateCar(testCar1);
+    }
+
 
 
 }

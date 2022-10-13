@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
 
@@ -105,4 +106,14 @@ public class CarService {
     }
 
 
+    public void updateCar(Car car) {
+        Query dynamicQuery = new Query();
+        dynamicQuery.addCriteria(new Criteria().andOperator(Criteria.where("brand").is(car.getBrand()),
+                Criteria.where("model").is(car.getModel())));
+        Update updateDefinition = new Update().set("year", car.getYear()).set("price", car.getPrice()).set("mileage", car.getMileage());
+
+        mongoTemplate.findAndModify(dynamicQuery, updateDefinition, Car.class);
+
+
+    }
 }
