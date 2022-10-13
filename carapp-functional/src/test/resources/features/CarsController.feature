@@ -13,7 +13,7 @@ Feature: Functional Tests for cars endpoint
     Then A body of "{\"description\":\"Incorrect car data provided\"}" is received
     And A status code of 400 is received
 
-  Scenario: http post request to cars/admin endpoint with incorrect data, exception caught and pretty response returned
+  Scenario: http post request to cars/admin endpoint with duplicate data, exception caught and pretty response returned
     When A post request is made to "cars/admin" endpoint with a car being "TestBrand, TestModelDontChangeMe, 2022, 80000, 10000, black"
     When A post request is made to "cars/admin" endpoint with a car being "TestBrand, TestModelDontChangeMe, 2022, 80000, 10000, black"
     Then A body of "{\"description\":\"Car already exists\"}" is received
@@ -39,6 +39,11 @@ Feature: Functional Tests for cars endpoint
     When A get request is made to "cars/admin/?model=TestModelDontChangeMe" endpoint
     Then A list of 3 cars is received
     And A status code of 200 is received
+
+  Scenario: http get request to cars/admin endpoint with wrong params
+    When A get request is made to "cars/admin/?brand=1" endpoint
+    Then A body of "{\"description\":\"Incorrect query parameter provided\"}" is received
+    And A status code of 400 is received
 
 
 
