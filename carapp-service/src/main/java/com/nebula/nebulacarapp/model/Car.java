@@ -1,6 +1,8 @@
 package com.nebula.nebulacarapp.model;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
@@ -16,7 +18,7 @@ import javax.validation.constraints.NotEmpty;
 @NoArgsConstructor
 @Getter
 @Setter
-@CompoundIndex( def = "{'brand' : 1, 'model' : 1}", unique = true)
+@CompoundIndex(def = "{'brand' : 1, 'model' : 1}", unique = true)
 public class Car {
     @Transient
     public static final String SEQUENCE_NAME = "users_sequence";
@@ -46,7 +48,6 @@ public class Car {
         this.mileage = mileage;
         this.colour = colour;
     }
-
 
 
     @Override

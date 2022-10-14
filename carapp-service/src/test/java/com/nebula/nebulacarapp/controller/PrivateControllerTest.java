@@ -15,7 +15,7 @@ public class PrivateControllerTest {
     PrivateController privateController;
 
     @Test
-    void whenPrivateStatusCalled_returnOK(){
+    void whenPrivateStatusCalled_returnOK() {
         ResponseEntity<String> response = privateController.getStatus();
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
     }

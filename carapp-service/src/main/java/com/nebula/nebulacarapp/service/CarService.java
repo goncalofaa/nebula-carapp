@@ -1,21 +1,16 @@
 package com.nebula.nebulacarapp.service;
 
-import com.mongodb.DuplicateKeyException;
-import com.mongodb.MongoBulkWriteException;
-import com.mongodb.MongoWriteException;
-import com.mongodb.bulk.BulkWriteError;
 import com.nebula.nebulacarapp.exceptions.CustomException;
 import com.nebula.nebulacarapp.exceptions.GlobalExceptionHandler;
 import com.nebula.nebulacarapp.model.Car;
 import com.nebula.nebulacarapp.repository.CarRepository;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
-
 
 import java.util.Collections;
 import java.util.List;
@@ -35,6 +30,7 @@ public class CarService {
 
     @Autowired
     private SequenceGeneratorService sequenceGeneratorService;
+
     private static Integer TryParseInt(String possibleInt) {
         try {
             return Integer.parseInt(possibleInt);
@@ -43,14 +39,14 @@ public class CarService {
         }
     }
 
-    public void saveCars(List<Car> carsList){
-        for (Car car: carsList) {
+    public void saveCars(List<Car> carsList) {
+        for (Car car : carsList) {
             car.setId(sequenceGeneratorService.generateSequence(Car.SEQUENCE_NAME));
             carRepository.insert(car);
         }
     }
 
-    public List<Car> getAllCars(){
+    public List<Car> getAllCars() {
         return carRepository.findAll();
     }
 
@@ -58,18 +54,16 @@ public class CarService {
     @SneakyThrows
     public List<Car> getQueriedCars(String paramKey, String paramValue) {
         Integer tryParseIntParamValue = TryParseInt(paramValue);
-        if(!paramKey.matches("brand|model|year|price|mileage|colour")){
+        if (!paramKey.matches("brand|model|year|price|mileage|colour")) {
             throw new CustomException("Parameters not recognized");
-        }else{
-            if(paramKey.matches("year|price|mileage") && tryParseIntParamValue == null){
+        } else {
+            if (paramKey.matches("year|price|mileage") && tryParseIntParamValue == null) {
                 throw new CustomException("Parameters not recognized");
-            }
-            else if(paramKey.matches("brand|model|colour") && tryParseIntParamValue != null){
+            } else if (paramKey.matches("brand|model|colour") && tryParseIntParamValue != null) {
                 throw new CustomException("Parameters not recognized");
-            }
-            else if (paramValue.contains(" ") || !paramValue.matches("^[a-zA-Z0-9_\\-.]*$")){
+            } else if (paramValue.contains(" ") || !paramValue.matches("^[a-zA-Z0-9_\\-.]*$")) {
                 throw new CustomException("Parameters not recognized");
-            }else{
+            } else {
                 Query dynamicQuery = new Query();
                 Criteria dynamicCriteria = Criteria.where(paramKey).is(tryParseIntParamValue != null ? tryParseIntParamValue : paramValue);
                 dynamicQuery.addCriteria(dynamicCriteria);
@@ -81,30 +75,31 @@ public class CarService {
 
 
     }
+
     @SneakyThrows
-    public void deleteById(int id){
-        if(carRepository.findById(id).isEmpty()){
+    public void deleteById(int id) {
+        if (carRepository.findById(id).isEmpty()) {
             throw new CustomException("Id not matching");
-        }else{
+        } else {
             carRepository.deleteById(id);
         }
 
     }
 
-    public void deleteTestData(Map<String,String> carsToDeleteObject) {
+    public void deleteTestData(Map<String, String> carsToDeleteObject) {
         String model = carsToDeleteObject.get("model");
 
         List<Car> carsToDelete = carRepository.findByModel(model);
         carRepository.deleteAll(carsToDelete);
     }
 
-@SneakyThrows
+    @SneakyThrows
     public void updateCar(List<Car> cars) {
 
-            for (Car car:cars) {
-                if(carRepository.findByModelAndBrand(car.getModel(),car.getBrand()) == null){
-                    throw new CustomException("No car matching");
-                }else {
+        for (Car car : cars) {
+            if (carRepository.findByModelAndBrand(car.getModel(), car.getBrand()) == null) {
+                throw new CustomException("No car matching");
+            } else {
                 Query dynamicQuery = new Query();
                 dynamicQuery.addCriteria(new Criteria().andOperator(Criteria.where("brand").is(car.getBrand()),
                         Criteria.where("model").is(car.getModel())));

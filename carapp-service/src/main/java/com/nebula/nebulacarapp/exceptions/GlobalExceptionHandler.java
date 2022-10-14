@@ -1,28 +1,20 @@
 package com.nebula.nebulacarapp.exceptions;
 
 import com.mongodb.MongoWriteException;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
-
 
 
     @ExceptionHandler(MongoWriteException.class)
@@ -40,13 +32,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity customException(
             CustomException customException) {
         Map<String, Object> body = new HashMap<>();
-        if (customException.getMessage() == "Extra parameters are present"|| customException.getMessage() == "Parameters not recognized")  {
+        if (customException.getMessage() == "Extra parameters are present" || customException.getMessage() == "Parameters not recognized") {
             body.put("description", "Incorrect query parameter provided");
-        }else if(customException.getMessage() == "Id not matching"){
+        } else if (customException.getMessage() == "Id not matching") {
             body.put("description", "Incorrect id provided");
-        }else if(customException.getMessage() == "No car matching"){
+        } else if (customException.getMessage() == "No car matching") {
             body.put("description", "Incorrect car data provided");
-        }else{
+        } else {
             body.put("description", "General Custom Exception");
         }
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
@@ -63,7 +55,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             violations.forEach(violation -> {
                 System.out.println(violation);
 
-                if(violation.getMessage().equals("must not be empty")){
+                if (violation.getMessage().equals("must not be empty")) {
 
                     errorBody.put("description", "Incorrect car data provided");
                 }
@@ -74,7 +66,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         }
         return new ResponseEntity<>(errorBody, HttpStatus.BAD_REQUEST);
     }
-
 
 
 ////    @ExceptionHandler(MethodArgumentNotValidException.class)

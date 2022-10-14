@@ -36,8 +36,8 @@ public class CarsControllerTest {
     ResponseEntity<?> response;
 
     @Test
-    void whenPostCarsCalled_return201_saveCarsCalled(){
-        Car testCar1 = new Car("bmw", "x5",2000,50000, 15000, "black");
+    void whenPostCarsCalled_return201_saveCarsCalled() {
+        Car testCar1 = new Car("bmw", "x5", 2000, 50000, 15000, "black");
         List<Car> carsList = new ArrayList<>();
         carsList.add(testCar1);
         response = carsController.postCars(carsList);
@@ -47,14 +47,13 @@ public class CarsControllerTest {
 
     @Test
     void whenPostCarsCalledWithWrongData_return400_genericException() {
-        try{
+        try {
             List<Car> carsList = new ArrayList<>();
-            Car testCar1 = new Car(null,null,1,1,1,"1");
+            Car testCar1 = new Car(null, null, 1, 1, 1, "1");
             carsList.add(testCar1);
             response = carsController.postCars(carsList);
             verify(carService, times(1)).saveCars(carsList);
-        }
-        catch(ConstraintViolationException ex){
+        } catch (ConstraintViolationException ex) {
             Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
             verify(globalExceptionHandler, times(1)).genericException(ex);
         }
@@ -63,9 +62,9 @@ public class CarsControllerTest {
 
     @Test
     void whenPostCarsCalledWithDuplicateCars_return409_duplicateKeyExceptionCalled() {
-        try{
+        try {
             List<Car> carsList = new ArrayList<>();
-            Car testCar1 = new Car("1","1",1,1,1,"1");
+            Car testCar1 = new Car("1", "1", 1, 1, 1, "1");
 
             carsList.add(testCar1);
 
@@ -73,36 +72,35 @@ public class CarsControllerTest {
             Assertions.assertEquals(HttpStatus.CREATED, response.getStatusCode());
             response = carsController.postCars(carsList);
             verify(carService, times(2)).saveCars(carsList);
-        }
-        catch(MongoWriteException ex) {
+        } catch (MongoWriteException ex) {
             Assertions.assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
             verify(globalExceptionHandler, times(1)).duplicateKeyException(ex);
         }
     }
 
     @Test
-    void whenGetCarsCalled_return200_getAllCarsCalled(){
+    void whenGetCarsCalled_return200_getAllCarsCalled() {
         response = carsController.getCars(null);
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         verify(carService, times(1)).getAllCars();
     }
 
     @Test
-    void whenDeleteCarByIdCalled_return204_deleteByIdCalled(){
+    void whenDeleteCarByIdCalled_return204_deleteByIdCalled() {
         response = carsController.deleteCarById(1);
         Assertions.assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
         verify(carService, times(1)).deleteById(1);
     }
 
     @Test
-    void whenDeleteNotAllowedCalled_return404(){
+    void whenDeleteNotAllowedCalled_return404() {
         response = carsController.deleteNotAllowed();
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
 
     }
 
     @Test
-    void whenGetCarsCalledWIthParams_return200_getQueriedCarsCalled(){
+    void whenGetCarsCalledWIthParams_return200_getQueriedCarsCalled() {
         Map<String, String> params = new HashMap<>();
         params.put("body", "bodyExample");
         response = carsController.getCars(params);
@@ -111,9 +109,9 @@ public class CarsControllerTest {
     }
 
     @Test
-    void whenUpdateCarCalled_return200_serviceUpdateCarCalled(){
+    void whenUpdateCarCalled_return200_serviceUpdateCarCalled() {
 
-        Car testCar1 = new Car("bmw", "x5",2000,50000, 15000, "black");
+        Car testCar1 = new Car("bmw", "x5", 2000, 50000, 15000, "black");
         List<Car> carsList = new ArrayList<>();
         carsList.add(testCar1);
         response = carsController.postCars(carsList);
@@ -123,7 +121,6 @@ public class CarsControllerTest {
         verify(carService, times(1)).saveCars(carsList);
         verify(carService, times(1)).updateCar(carsList);
     }
-
 
 
 }
