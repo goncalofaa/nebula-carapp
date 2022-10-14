@@ -62,4 +62,13 @@ Feature: Functional Tests for cars endpoint
     Then A body of "{\"description\":\"Car Updated\"}" is received
     And A status code of 200 is received
 
+  Scenario: http put request to cars/admin endpoint with incorrect data, exception caught and pretty response returned
+    When A "post" request is made to "cars/admin" endpoint with a car being "TestBrand1, TestModelDontChangeMe, 2022, 80000, 10000, black"
+    Then A body of "{\"description\":\"Database updated\"}" is received
+    When A get request is made to "cars/admin/?brand=TestBrand" endpoint
+    Then A list of 1 cars is received
+    When A "put" request is made to "cars/admin" endpoint with a car being "TestBrand1, , 1000, 2000, 12222, black"
+    Then A body of "{\"description\":\"Incorrect car data provided\"}" is received
+    And A status code of 400 is received
+
 

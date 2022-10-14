@@ -57,15 +57,14 @@ public class HttpRequestsSteps {
         bodyList.add(bodyMap);
         Gson gson = new Gson();
         String bodyJson = gson.toJson(bodyList);
-
+        RequestSpecification request = given().body(bodyJson);
+        request.header("Content-Type", "application/json");
         if (requestType.matches("post")){
-            RequestSpecification request = given().body(bodyJson);
-            request.header("Content-Type", "application/json");
+
             response = request.post(endpoint);
         }
         if (requestType.matches("put")){
-            RequestSpecification request = given().body(bodyMap);
-            request.header("Content-Type", "application/json");
+
             response = request.put(endpoint);
         }
 

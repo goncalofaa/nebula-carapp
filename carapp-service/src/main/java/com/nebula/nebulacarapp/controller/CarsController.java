@@ -86,9 +86,9 @@ public class CarsController {
     }
 
     @PutMapping("/admin")
-    public ResponseEntity<Object> updateCar(@RequestBody @Valid Car car) {
+    public ResponseEntity<Object> updateCar(@RequestBody  List<@Valid Car> cars) {
 
-        carService.updateCar(car);
+        carService.updateCar(cars);
 
         Map<String,String> responseObject = new HashMap<>();
         responseObject.put("description", "Car Updated");
