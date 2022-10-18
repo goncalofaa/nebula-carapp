@@ -36,7 +36,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             body.put("description", "Incorrect query parameter provided");
         } else if (customException.getMessage() == "Id not matching") {
             body.put("description", "Incorrect id provided");
-        } else if (customException.getMessage() == "No car matching") {
+        } else if (customException.getMessage() == "No car matching" || customException.getMessage() == "Wrong properties for update") {
             body.put("description", "Incorrect car data provided");
         } else {
             body.put("description", "General Custom Exception");

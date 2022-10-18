@@ -99,10 +99,17 @@ public class CarService {
         for (Car car : cars) {
             if (carRepository.findByModelAndBrand(car.getModel(), car.getBrand()) == null) {
                 throw new CustomException("No car matching");
+
             } else {
+
                 Query dynamicQuery = new Query();
                 dynamicQuery.addCriteria(new Criteria().andOperator(Criteria.where("brand").is(car.getBrand()),
                         Criteria.where("model").is(car.getModel())));
+
+
+                if (car.getYear() == 0) throw new CustomException("Wrong properties for update");
+                if (car.getPrice() == 0) throw new CustomException("Wrong properties for update");
+                if (car.getMileage() == 0) throw new CustomException("Wrong properties for update");
                 Update updateDefinition = new Update().set("year", car.getYear()).set("price", car.getPrice()).set("mileage", car.getMileage());
 
                 mongoTemplate.findAndModify(dynamicQuery, updateDefinition, Car.class);

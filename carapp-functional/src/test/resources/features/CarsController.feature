@@ -1,4 +1,5 @@
 Feature: Functional Tests for cars endpoint
+
   Background:
     Given All Test data has been deleted
 
@@ -70,5 +71,6 @@ Feature: Functional Tests for cars endpoint
     When A "put" request is made to "cars/admin" endpoint with a car being "TestBrand1, , 1000, 2000, 12222, black"
     Then A body of "{\"description\":\"Incorrect car data provided\"}" is received
     And A status code of 400 is received
+
 
 

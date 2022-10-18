@@ -83,7 +83,7 @@ public class CarsController {
     }
 
     @PutMapping("/admin")
-    public ResponseEntity<Object> updateCar(@RequestBody List<@Valid Car> cars) {
+    public ResponseEntity<Object> updateCar(@RequestBody List<Car> cars) {
 
         carService.updateCar(cars);
 
